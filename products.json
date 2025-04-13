@@ -1,0 +1,17 @@
+[
+    {
+      "product_id": "AB001",
+      "name": "AquaBlaster X",
+      "description": "A high-quality waterproof device, perfect for outdoor adventures.",
+      "features": "Waterproof, durable, sleek design",
+      "price": 999
+    },
+    {
+      "product_id": "CD002",
+      "name": "FireShield Pro",
+      "description": "A fire-resistant device ideal for extreme conditions.",
+      "features": "Fireproof, rugged, long-lasting battery",
+      "price": 1499
+    }
+  ]
+  
