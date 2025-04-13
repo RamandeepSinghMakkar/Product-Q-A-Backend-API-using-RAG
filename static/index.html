@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product QA</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { display: flex; flex-direction: column; align-items: flex-start; }
+        .output-box { margin-top: 20px; }
+        .output-box h3 { margin-bottom: 10px; }
+        .result-box { border: 1px solid #ddd; padding: 15px; width: 400px; }
+        .source-box { margin-top: 20px; padding: 10px; border: 1px solid #ddd; width: 400px; }
+        .source-box h4 { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ask a Product Question</h1>
+        <input type="text" id="question-input" placeholder="Enter your question" style="width: 400px;">
+        <button onclick="askQuestion()">Ask</button>
+
+        <div class="output-box" id="answer-box" style="display:none;">
+            <div class="result-box" id="answer-result"></div>
+        </div>
+
+        <div class="output-box" id="source-box" style="display:none;">
+            <div class="source-box" id="source-result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const question = document.getElementById("question-input").value;
+            const response = await fetch("http://127.0.0.1:8000/ask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ question: question }),
+            });
+            const data = await response.json();
+    
+            // Show answer and primary product ID in the answer box.
+            const answerBox = document.getElementById("answer-result");
+            answerBox.innerHTML = `
+                <h3>Answer:</h3>
+                <p>${data.answer}</p>
+                <p><strong>Main Product ID:</strong> ${data.primary_product_id}</p>
+            `;
+            document.getElementById("answer-box").style.display = "block";
+    
+            // Show additional product IDs separately in the source box.
+            const sourceBox = document.getElementById("source-result");
+            if(data.additional_product_ids && data.additional_product_ids.length > 0) {
+                sourceBox.innerHTML = `
+                    <h4>Additional Product IDs:</h4>
+                    <ul>${data.additional_product_ids.map(id => `<li>${id}</li>`).join("")}</ul>
+                `;
+            } else {
+                sourceBox.innerHTML = "<h4>No additional products found.</h4>";
+            }
+            document.getElementById("source-box").style.display = "block";
+        }
+    </script>
+    
+</body>
+</html>
